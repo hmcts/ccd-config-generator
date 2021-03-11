@@ -70,7 +70,7 @@ public class Event<T, R extends HasRole, S> {
     return historyOnlyRoles;
   }
 
-  private Class dataClass;
+  private Class<T> dataClass;
   private static int eventCount;
 
   public static class EventBuilder<T, R extends HasRole, S> {
@@ -78,7 +78,7 @@ public class Event<T, R extends HasRole, S> {
     private WebhookConvention webhookConvention;
 
     public static <T, R extends HasRole, S> EventBuilder<T, R, S> builder(
-        String id, Class dataClass, WebhookConvention convention, PropertyUtils propertyUtils,
+        String id, Class<T> dataClass, WebhookConvention convention, PropertyUtils propertyUtils,
         Set<S> preStates, Set<S> postStates) {
       EventBuilder<T, R, S> result = new EventBuilder<T, R, S>();
       result.id(id);

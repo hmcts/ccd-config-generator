@@ -13,12 +13,12 @@ import uk.gov.hmcts.ccd.sdk.api.HasLabel;
 
 class FixedListGenerator {
 
-  public static void generate(File root, Map<Class, Integer> types) {
+  public static void generate(File root, Map<Class<?>, Integer> types) {
     File dir = root.toPath().resolve("FixedLists").toFile();
     dir.mkdir();
 
-    for (Class c : types.keySet()) {
-      ComplexType complexType = (ComplexType) c.getAnnotation(ComplexType.class);
+    for (Class<?> c : types.keySet()) {
+      ComplexType complexType = c.getAnnotation(ComplexType.class);
       if (c.isEnum() && (complexType == null || complexType.generate())) {
         List<Map<String, Object>> fields = Lists.newArrayList();
 

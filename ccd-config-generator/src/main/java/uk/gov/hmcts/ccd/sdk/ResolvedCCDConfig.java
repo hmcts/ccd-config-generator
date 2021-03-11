@@ -9,18 +9,18 @@ import uk.gov.hmcts.ccd.sdk.api.HasRole;
 
 public class ResolvedCCDConfig<T, S, R extends HasRole> {
 
-  public final Class<?> typeArg;
+  public final Class<T> typeArg;
   public final ConfigBuilderImpl<T, S, R> builder;
   public final List<Event<T, R, S>> events;
-  public final Map<Class, Integer> types;
+  public final Map<Class<?>, Integer> types;
   public final String environment;
-  public final Class<?> stateArg;
-  public final Class<?> roleType;
+  public final Class<S> stateArg;
+  public final Class<R> roleType;
   public final ImmutableSet<S> allStates;
 
-  public ResolvedCCDConfig(Class<?> typeArg, Class<?> stateArg, Class<?> roleType,
+  public ResolvedCCDConfig(Class<T> typeArg, Class<S> stateArg, Class<R> roleType,
                            ConfigBuilderImpl<T, S, R> builder, List<Event<T, R, S>> events,
-                           Map<Class, Integer> types, String environment,
+                           Map<Class<?>, Integer> types, String environment,
                            Set<S> allStates) {
     this.typeArg = typeArg;
     this.stateArg = stateArg;
