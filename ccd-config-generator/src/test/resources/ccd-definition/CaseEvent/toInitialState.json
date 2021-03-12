@@ -1,0 +1,13 @@
+[
+  {
+    "LiveFrom": "01/01/2017",
+    "Description": "toInitialState",
+    "DisplayOrder": 1,
+    "EndButtonLabel": "Save and continue",
+    "SecurityClassification": "Public",
+    "Name": "toInitialState",
+    "CaseTypeID": "CARE_SUPERVISION_EPO",
+    "PostConditionState": "HasAnInitialEventOnly",
+    "ID": "toInitialState"
+  }
+]

@@ -36,10 +36,10 @@ class AuthorisationCaseStateGenerator {
         // For state transitions if you have C then you get both states.
         // Otherwise you only need permission for the destination state.
         if (event.getPreState() != event.getPostState()) {
-          if (rolePermission.getValue().contains(Permission.C) && !event.getPreState().isEmpty()) {
+          if (rolePermission.getValue().contains(Permission.C)) {
             addPermissions(stateRolePermissions, event.getPreState(), rolePermission.getKey(),
                 rolePermission.getValue());
-            // They get R only on the destination state.
+            // They always get R on the destination state.
             addPermissions(stateRolePermissions, event.getPostState(), rolePermission.getKey(),
                 Collections.singleton(Permission.R));
           }

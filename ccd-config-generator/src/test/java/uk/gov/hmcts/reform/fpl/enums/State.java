@@ -12,6 +12,7 @@ public enum State {
     @CCD(name = "Prepare for hearing",
         label = "State indicating that SDO is ready to send - triggered when SDO is issued")
     PREPARE_FOR_HEARING,
+    HasAnInitialEventOnly,
     @CCD(label = "Deleted case state - all data is removed")
     Deleted
 }
