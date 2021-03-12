@@ -54,6 +54,14 @@ public class Event<T, R extends HasRole, S> {
     }
   }
 
+  public String getName() {
+    return name == null ? id : name;
+  }
+
+  public String getDescription() {
+    return description == null ? getName() : description;
+  }
+
   @ToString.Exclude
   private FieldCollection.FieldCollectionBuilder<T, EventBuilder<T, R, S>> fields;
 

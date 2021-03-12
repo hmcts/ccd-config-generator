@@ -77,6 +77,10 @@ public class CCDConfig extends BaseCCDConfig<CaseData, State, UserRole> {
             .name("Add case notes")
             .fields()
             .optional(CaseData::getCaseNotes);
+
+        event("toInitialState")
+            .initialState(State.HasAnInitialEventOnly)
+            .grant(CRU, JUDICIARY);
     }
 
     private void buildSearchResultFields() {
