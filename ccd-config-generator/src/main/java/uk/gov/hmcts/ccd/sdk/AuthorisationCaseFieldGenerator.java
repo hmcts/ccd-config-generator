@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +143,9 @@ class AuthorisationCaseFieldGenerator {
 
           for (HasRole key : roleGrants.keys()) {
             if (fieldRolePermissions.contains(id, key.getRole())) {
-              fieldRolePermissions.get(id, key.getRole()).addAll(roleGrants.get(key));
+              Set<Permission> existingPermissionsCopy = new HashSet<>(fieldRolePermissions.get(id, key.getRole()));
+              existingPermissionsCopy.addAll(roleGrants.get(key));
+              fieldRolePermissions.put(id, key.getRole(), existingPermissionsCopy);
             } else {
               fieldRolePermissions.put(id, key.getRole(), roleGrants.get(key));
             }
