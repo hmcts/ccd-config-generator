@@ -14,6 +14,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    implementation group: 'uk.gov.hmcts.reform', name: 'core-case-data-store-client', version: '4.7.6'
 
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.10'
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.10'

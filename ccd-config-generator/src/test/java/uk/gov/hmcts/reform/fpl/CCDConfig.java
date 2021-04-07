@@ -23,6 +23,8 @@ import static uk.gov.hmcts.reform.fpl.enums.UserRole.SYSTEM_UPDATE;
 import com.google.common.base.CaseFormat;
 import uk.gov.hmcts.ccd.sdk.api.BaseCCDConfig;
 import uk.gov.hmcts.ccd.sdk.api.Webhook;
+import uk.gov.hmcts.ccd.sdk.runtime.AboutToStartOrSubmitCallbackResponse;
+import uk.gov.hmcts.ccd.sdk.runtime.CallbackRequest;
 import uk.gov.hmcts.reform.fpl.enums.State;
 import uk.gov.hmcts.reform.fpl.enums.UserRole;
 import uk.gov.hmcts.reform.fpl.model.CaseData;
@@ -202,12 +204,17 @@ public class CCDConfig extends BaseCCDConfig<CaseData, State, UserRole> {
             .restrictedField(CaseData::getCaseNotes).exclude(CAFCASS, LOCAL_AUTHORITY);
     }
 
+    private AboutToStartOrSubmitCallbackResponse<CaseData, State> OnFoo(CallbackRequest<CaseData> request) {
+      throw new RuntimeException();
+    }
+
     private void buildUniversalEvents() {
         event("addFamilyManCaseNumber")
             .forAllStates()
             .name("Add case number")
             .explicitGrants()
             .grant(CRU, HMCTS_ADMIN)
+            .fooBar(CCDConfigDevelopment::OnFoo)
             .aboutToSubmitWebhook("add-case-number")
             .submittedWebhook()
             .fields()

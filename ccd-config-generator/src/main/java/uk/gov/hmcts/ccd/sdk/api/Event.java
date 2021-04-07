@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import lombok.With;
+import uk.gov.hmcts.ccd.sdk.runtime.Callback;
 
 @Builder
 @Data
@@ -206,6 +207,14 @@ public class Event<T, R extends HasRole, S> {
       return this;
     }
 
+    public EventBuilder<T, R, S> abutToSubmitWebhook(String eventId, int... retries) {
+      de.cronn.reflection.util.PropertyUtils.getm
+      this.customWebhookName = eventId;
+      aboutToSubmitURL = getWebhookPathByConvention(Webhook.AboutToSubmit);
+      setRetries(Webhook.AboutToSubmit, retries);
+      return this;
+    }
+
     public EventBuilder<T, R, S> aboutToSubmitWebhook(String eventId, int... retries) {
       this.customWebhookName = eventId;
       aboutToSubmitURL = getWebhookPathByConvention(Webhook.AboutToSubmit);
@@ -251,6 +260,10 @@ public class Event<T, R extends HasRole, S> {
       String id = customWebhookName != null ? customWebhookName
           : eventId;
       return webhookConvention.buildUrl(hook, id);
+    }
+
+    public EventBuilder<T, R, S> fooBar(Callback<T, S> callback) {
+      return null;
     }
   }
 }
