@@ -8,7 +8,7 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'jacoco'
 
-    version = System.getenv('VERSION')
+    version = System.getenv('VERSION').replace("refs/tags/", "")
     group
     compileJava   {
         sourceCompatibility = 11
