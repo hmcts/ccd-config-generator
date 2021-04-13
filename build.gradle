@@ -2,13 +2,15 @@ plugins {
     id 'com.jfrog.bintray' version '1.8.5' apply false
 }
 
+allprojects {
+  version = System.getenv("VERSION")
+}
+
 subprojects {
     apply plugin: 'checkstyle'
     apply plugin: 'java'
     apply plugin: 'maven-publish'
     apply plugin: 'jacoco'
-
-    group = 'com.github.hmcts'
 
     compileJava   {
         sourceCompatibility = 11
