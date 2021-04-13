@@ -8,6 +8,8 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'jacoco'
 
+    group = 'com.github.hmcts'
+
     compileJava   {
         sourceCompatibility = 11
         targetCompatibility = 11
