@@ -8,8 +8,14 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'jacoco'
 
-    version = System.getenv('VERSION').replace("refs/tags/", "")
-    group
+    def buildNumber =
+      System.getenv("VERSION").contains('heads')
+        ? System.getenv("VERSION").replace("refs/heads/", "")
+        : System.getenv("VERSION").replace("refs/tags/", "")
+    version = buildNumber
+
+    group 'com.github.hmcts'
+
     compileJava   {
         sourceCompatibility = 11
         targetCompatibility = 11
