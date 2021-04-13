@@ -9,7 +9,7 @@ subprojects {
     apply plugin: 'jacoco'
 
     version = System.getenv('VERSION')
-
+    group
     compileJava   {
         sourceCompatibility = 11
         targetCompatibility = 11
