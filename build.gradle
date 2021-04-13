@@ -8,10 +8,8 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'jacoco'
 
-    def buildNumber = System.getenv("VERSION")?.replace("refs/tags/", "") ?: "DEV-SNAPSHOT"
-
     group 'uk.gov.hmcts.reform'
-    version buildNumber
+    version System.getenv("VERSION")
 
     compileJava   {
         sourceCompatibility = 11
