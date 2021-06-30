@@ -1,13 +1,10 @@
 package uk.gov.hmcts.ccd.sdk;
 
 import java.util.List;
-import org.junit.Before;
+
 import org.junit.Test;
-import org.reflections.Reflections;
 import uk.gov.hmcts.ccd.sdk.api.CCDConfig;
 import uk.gov.hmcts.ccd.sdk.api.ConfigBuilder;
-import uk.gov.hmcts.ccd.sdk.api.Event;
-import uk.gov.hmcts.ccd.sdk.api.Webhook;
 import uk.gov.hmcts.example.missingcomplex.Applicant;
 import uk.gov.hmcts.example.missingcomplex.MissingComplex;
 import uk.gov.hmcts.reform.fpl.enums.State;
@@ -17,6 +14,9 @@ import uk.gov.hmcts.reform.fpl.model.CaseData;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UnitTest {
+
+  private List<CCDConfig<MissingComplex, State, UserRole>> ccdConfigs;
+  private List<CCDConfig<CaseData, State, UserRole>> ccdConfigs1;
 
   @Test
   public void npeBug() {
@@ -31,8 +31,9 @@ public class UnitTest {
       }
     }
 
-    ConfigGenerator<CaseData, State, UserRole> generator = new ConfigGenerator<>(List.of(new NPEBug()));
-    generator.resolveCCDConfig();
+    List<CCDConfig<CaseData, State, UserRole>> ccdConfigs = List.of(new NPEBug());
+    ConfigGenerator<CaseData, State, UserRole> generator = new ConfigGenerator<>(ccdConfigs);
+    generator.resolveCCDConfig(ccdConfigs);
   }
 
   @Test
@@ -43,8 +44,10 @@ public class UnitTest {
       }
     }
 
-    ConfigGenerator<MissingComplex, State, UserRole> generator = new ConfigGenerator<>(List.of(new MissingBug()));
-    ResolvedCCDConfig<MissingComplex, State, UserRole> resolved = generator.resolveCCDConfig();
+    List<CCDConfig<MissingComplex, State, UserRole>> ccdConfigs = List.of(new MissingBug());
+
+    ConfigGenerator<MissingComplex, State, UserRole> generator = new ConfigGenerator<>(ccdConfigs);
+    ResolvedCCDConfig<MissingComplex, State, UserRole> resolved = generator.resolveCCDConfig(ccdConfigs);
     assertThat(resolved.types).containsKeys(Applicant.class);
   }
 }

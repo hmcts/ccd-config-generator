@@ -16,12 +16,15 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lombok.SneakyThrows;
 import net.jodah.typetools.TypeResolver;
+import org.apache.commons.lang3.StringUtils;
 import org.reflections.ReflectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -52,16 +55,25 @@ class ConfigGenerator<T, S, R extends HasRole> {
 
   public void resolveConfig(File outputFolder) {
     initOutputDirectory(outputFolder);
-    ResolvedCCDConfig resolved = resolveCCDConfig();
-    File destination = Strings.isNullOrEmpty(resolved.environment) ? outputFolder
-        : new File(outputFolder, resolved.environment);
-    writeConfig(destination, resolved);
+    List<List<CCDConfig<T, S, R>>> configListByCaseType = splitConfigByCaseType(this.configs);
+    for (List<CCDConfig<T, S, R>> configs : configListByCaseType) {
+      ResolvedCCDConfig resolved = resolveCCDConfig(configs);
+
+      String packageName = configs.get(0).getClass().getPackageName();
+      String packageNameWithoutCommonPrefix = packageName.replace("uk.gov.hmcts.nfdiv.", "");
+      String destinationFolder = StringUtils.substringBefore(packageNameWithoutCommonPrefix, ".");
+
+      File destinationFolderPath = new File(outputFolder + "/" + destinationFolder);
+      File destination = Strings.isNullOrEmpty(resolved.environment) ? destinationFolderPath
+          : new File(destinationFolderPath, resolved.environment);
+      writeConfig(destination, resolved);
+    }
   }
 
   @SneakyThrows
   @Bean
-  public ResolvedCCDConfig<T, S, R> resolveCCDConfig() {
-    CCDConfig<T, S, R> config = this.configs.iterator().next();
+  public ResolvedCCDConfig<T, S, R> resolveCCDConfig(List<CCDConfig<T, S, R>> configs) {
+    CCDConfig<T, S, R> config = configs.iterator().next();
     Class<?>[] typeArgs = TypeResolver.resolveRawArguments(CCDConfig.class, config.getClass());
     Set<S> allStates = Set.of(((Class<S>)typeArgs[1]).getEnumConstants());
     ConfigBuilderImpl builder = new ConfigBuilderImpl(typeArgs[0], allStates);
@@ -94,6 +106,24 @@ class ConfigGenerator<T, S, R extends HasRole> {
     return new ResolvedCCDConfig(typeArgs[0], typeArgs[1], typeArgs[2], builder, events, types,
         builder.environment, allStates, aboutToStartCallbacks, aboutToSubmitCallbacks, submittedCallbacks,
         midEventCallbacks);
+  }
+
+  private List<List<CCDConfig<T, S, R>>> splitConfigByCaseType(List<CCDConfig<T,S,R>> configs) {
+    Map<String, List<CCDConfig<T, S, R>>> ccdConfigMap = new HashMap<>();
+    for (CCDConfig<T, S, R> ccdConfig : configs) {
+      String packageName = ccdConfig.getClass().getPackageName();
+      String packageNameWithoutCommonPrefix = packageName.replace("uk.gov.hmcts.nfdiv.", "");
+      String caseType = StringUtils.substringBefore(packageNameWithoutCommonPrefix, ".");
+
+      if (ccdConfigMap.containsKey(caseType)) {
+        ccdConfigMap.get(caseType).add(ccdConfig);
+      } else {
+        List<CCDConfig<T, S, R>> ccdConfigs = new ArrayList<>();
+        ccdConfigs.add(ccdConfig);
+        ccdConfigMap.put(caseType, ccdConfigs);
+      }
+    }
+    return new ArrayList<>(ccdConfigMap.values());
   }
 
   private void writeConfig(File outputfolder, ResolvedCCDConfig<T, S, R> config) {
